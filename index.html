@@ -5,10 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DreamSync Studios - Home of Immersive Worlds</title>
     
-    <!-- FIX 1: Corrected favicon link to DremSyncLogo.png -->
     <link rel="icon" type="image/png" href="DremSyncLogo.png">
 
-    <!-- Load Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         /* Base configuration */
@@ -92,15 +90,12 @@
 </head>
 <body class="dream-bg text-white">
 
-    <!-- Message Box UI (for feedback instead of alert/confirm) -->
     <div id="messageBox" class="fixed top-24 right-4 p-4 rounded-lg shadow-2xl z-50 transition-all duration-300 transform translate-x-full opacity-0 glass-effect">
         <p id="messageText" class="font-semibold"></p>
     </div>
 
-    <!-- Header and Navigation (Glass Effect) -->
     <header class="fixed top-0 left-0 w-full z-20 glass-effect p-4 shadow-xl">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
-            <!-- Logo - FIXED: Using the direct file name DremSyncLogo.png -->
             <div class="flex items-center space-x-3">
                 <img 
                     src="DremSyncLogo.png" 
@@ -111,7 +106,6 @@
                 <h1 class="text-2xl font-bold tracking-widest uppercase text-white transition duration-500 hover:text-yellow-400">DreamSync</h1>
             </div>
 
-            <!-- Navigation Links -->
             <nav class="flex space-x-6 md:space-x-10">
                 <a href="#" class="nav-link text-lg font-medium transition duration-300 pb-2" data-tab="home">Home</a>
                 <a href="#" class="nav-link text-lg font-medium transition duration-300 pb-2" data-tab="downloads">Downloads</a>
@@ -121,10 +115,8 @@
         </div>
     </header>
 
-    <!-- Main Content Area -->
     <main class="pt-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-        <!-- Home Section -->
         <section id="home" class="content-section hidden-section">
             <div class="glass-effect rounded-2xl p-8 md:p-12 text-center my-8">
                 <h2 class="text-5xl md:text-7xl font-extrabold mb-4 hero-title" style="text-shadow: 0 0 15px rgba(255, 204, 0, 0.7);">
@@ -139,14 +131,12 @@
             </div>
 
             <div class="grid md:grid-cols-2 gap-8 my-12">
-                <!-- Feature 1 -->
                 <div class="glass-effect rounded-2xl p-6 transition duration-500 hover:shadow-2xl hover:shadow-yellow-500/50 transform hover:-translate-y-1">
                     <h3 class="text-3xl font-semibold mb-3 text-yellow-400">Next-Gen Immersion</h3>
                     <p class="text-gray-300">
                         Experience cutting-edge graphics and deeply emotional storylines that push the boundaries of interactive entertainment.
                     </p>
                 </div>
-                <!-- Feature 2 -->
                 <div class="glass-effect rounded-2xl p-6 transition duration-500 hover:shadow-2xl hover:shadow-yellow-500/50 transform hover:-translate-y-1">
                     <h3 class="text-3xl font-semibold mb-3 text-yellow-400">Community Focused</h3>
                     <p class="text-gray-300">
@@ -156,18 +146,14 @@
             </div>
         </section>
 
-        <!-- Downloads Section -->
         <section id="downloads" class="content-section hidden-section">
             <h2 class="text-4xl font-bold my-8 text-center" style="text-shadow: 0 0 10px rgba(255, 204, 0, 0.5);">Latest Releases</h2>
             
-            <!-- Downloads Content Container - Populated by JS -->
             <div id="downloadsContainer" class="grid lg:grid-cols-2 gap-8 mb-12">
-                <!-- Static Game Cards will be rendered here -->
-            </div>
+                </div>
             
         </section>
         
-        <!-- About Section -->
         <section id="about" class="content-section hidden-section">
             <h2 class="text-4xl font-bold my-8 text-center" style="text-shadow: 0 0 10px rgba(255, 204, 0, 0.5);">Our Vision</h2>
             
@@ -183,7 +169,6 @@
             </div>
         </section>
 
-        <!-- Contact Section -->
         <section id="contact" class="content-section hidden-section">
             <h2 class="text-4xl font-bold my-8 text-center" style="text-shadow: 0 0 10px rgba(255, 204, 0, 0.5);">Get In Touch</h2>
             
@@ -202,7 +187,6 @@
                         <textarea id="message" name="message" rows="4" required class="w-full bg-white/10 glass-effect p-3 rounded-lg border border-white/20 focus:outline-none focus:border-yellow-500 transition duration-200"></textarea>
                     </div>
                     
-                    <!-- Single Button Container for Gmail -->
                     <div class="flex flex-col md:flex-row gap-4 justify-center pt-4">
                         <button type="button" id="sendGmailContact" class="bg-red-600 text-white font-bold py-3 px-8 rounded-full transition duration-500 transform hover:scale-105 shadow-xl hover:shadow-red-500/50 flex-1">
                             Open in Gmail
@@ -210,7 +194,6 @@
                     </div>
                 </form>
 
-                <!-- Guidance Text for Gmail -->
                 <div class="mt-6 p-4 rounded-xl bg-white/10 border border-yellow-500/30">
                     <p class="text-sm font-semibold text-yellow-300 mb-2">Gmail Account Tip:</p>
                     <p class="text-xs text-gray-300">
@@ -219,7 +202,6 @@
                     </p>
                 </div>
 
-                <!-- Manual Contact Info -->
                 <p id="manualContactInfo" class="text-center text-sm mt-4 text-gray-400 hidden">
                     If this didn't work, please copy our address: <span class="font-mono text-yellow-300 select-all" id="manualEmailAddress"></span>
                 </p>
@@ -228,12 +210,37 @@
 
     </main>
     
-    <!-- Footer -->
     <footer class="glass-effect mt-20 p-6 text-center text-gray-400">
+        <div class="mb-4">
+            <p class="text-lg font-semibold text-white mb-2">Follow Our Dreamscape ✨</p>
+            <div class="flex justify-center space-x-4">
+                
+                <a 
+                    href="https://www.youtube.com/@DreamSyncStudios-i5c8s" 
+                    target="_blank" 
+                    aria-label="Follow us on YouTube"
+                    class="text-yellow-400 hover:text-yellow-300 transition duration-300 transform hover:scale-110"
+                >
+                    <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M21.583 7.128c-.288-1.096-.95-1.91-1.954-2.185-1.503-.41-7.583-.41-7.583-.41s-6.082 0-7.584.41c-1.004.275-1.666 1.09-1.954 2.185-.28 1.055-.416 3.32-.416 4.872s.136 3.817.416 4.872c.288 1.096.95 1.91 1.954 2.185 1.503.41 7.584.41 7.584.41s6.08 0 7.583-.41c1.004-.275 1.666-1.09 1.954-2.185.28-1.055.416-3.32.416-4.872s-.136-3.817-.416-4.872zm-12.592 7.127V8.752l4.909 3.251-4.909 3.252z"/>
+                    </svg>
+                </a>
+                
+                <a 
+                    href="https://discord.gg/KMAcT2pWdw" 
+                    target="_blank" 
+                    aria-label="Join our Discord server"
+                    class="text-yellow-400 hover:text-yellow-300 transition duration-300 transform hover:scale-110"
+                >
+                    <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 50 50">
+                        <path d="M40 12.3c-1.2-1.7-2.8-3.2-4.5-4.2.4-1.2.6-2.5.5-3.8-.5-1.5-1.9-2.7-3.4-3.2-1.8-.6-3.7-.3-5.2.7-2.7-1.4-5.8-1.4-8.6 0-1.5-1-3.4-1.3-5.2-.7-1.5.5-2.9 1.7-3.4 3.2-.1 1.3.1 2.6.5 3.8-1.7 1-3.3 2.5-4.5 4.2-2.1 3-3.1 6.5-2.8 10.1.3 3.6 1.8 7.1 4.2 9.7 1.5 1.6 3.3 2.8 5.4 3.6 1.5.5 3.1.8 4.7.7 1.5-.1 3-.3 4.4-.8.5-.2 1-.5 1.4-.8.5.2 1 .5 1.5.8 1.4.5 3 .7 4.5.8 1.6-.1 3.1-.4 4.7-.7 2.1-.8 3.9-2 5.4-3.6 2.4-2.6 3.9-6.1 4.2-9.7.3-3.6-.7-7.1-2.8-10.1zm-13.6 19.5c-2.3 0-4.2-2.4-4.2-5.4 0-3 1.9-5.4 4.2-5.4 2.3 0 4.2 2.4 4.2 5.4 0 3-1.9 5.4-4.2 5.4zm10.7 0c-2.3 0-4.2-2.4-4.2-5.4 0-3 1.9-5.4 4.2-5.4 2.3 0 4.2 2.4 4.2 5.4 0 3-1.9 5.4-4.2 5.4z"/>
+                    </svg>
+                </a>
+            </div>
+        </div>
         <p>&copy; 2024 DreamSync Studios. All Rights Reserved. | <a href="#" class="text-yellow-400 hover:text-white transition duration-300">Privacy Policy</a></p>
     </footer>
 
-    <!-- JavaScript Logic -->
     <script>
         // --- STATIC DATA ---
         const ADMIN_EMAIL = "dreamsyncstudios04@gmail.com";
