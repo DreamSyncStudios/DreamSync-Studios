@@ -433,7 +433,8 @@
         genre: "Survival Horror",
         release: "August 16, 2025",
         status: "Available",
-        img: "https://placehold.co/400x225/060606/e6d89a?text=Screaming+Forest+1.2"
+        img: "https://placehold.co/400x225/060606/e6d89a?text=Screaming+Forest+1.2",
+        downloadLink: "https://dreamsync-studios.itch.io/screaming-forest"
       },
       {
         title: "The Silent Guest",
@@ -442,7 +443,8 @@
         genre: "Psychological Thriller",
         release: "March 22, 2025",
         status: "Available",
-        img: "https://placehold.co/400x225/060606/e6d89a?text=Silent+Guest+1.1"
+        img: "https://placehold.co/400x225/060606/e6d89a?text=Silent+Guest+1.1",
+        downloadLink: "https://dreamsync-studios.itch.io/the-silent-guest"
       }
     ];
 
@@ -482,7 +484,7 @@
             </div>
             <div class="mt-auto pt-3 border-t border-gray-700 flex justify-between items-center">
                 <span class="text-xs font-semibold px-3 py-1 rounded-full text-white ${statusColor}">${game.status}</span>
-                <a href="#" class="text-gold hover:underline text-sm font-medium transition-colors">View Details &rarr;</a>
+                <a href="${game.downloadLink}" class="text-gold hover:underline text-sm font-medium transition-colors">View Details &rarr;</a>
             </div>
           </div>
         </div>
