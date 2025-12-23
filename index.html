@@ -3,356 +3,990 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>DreamSync Creative Portal — Support and Innovation</title>
-  <meta name="description" content="DreamSync Studios, founded in 2024, crafts narrative-led games. Contact us for support or explore our technology and career paths." />
+  <title>DreamSync Creative Portal — The Future of Narrative Gaming</title>
+  <meta name="description" content="DreamSync Studios, founded in 2024, crafts narrative-led games. Explore our high-fidelity games, meet our founders, and stay updated." />
   <meta name="theme-color" content="#050406" />
   <link rel="icon" href="DremSyncLogo.png" type="image/jpeg" />
 
+  <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700;800&family=Space+Grotesk:wght@300;700&display=swap" rel="stylesheet">
 
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
 
   <style>
-    :root{
-      --bg-dark: #050406;
-      --panel-dark: rgba(10,10,10,0.6);
-      --glass-weak: rgba(255,255,255,0.03);
+    :root {
+      --bg-pure: #050406;
       --gold: #d4af37;
-      --gold-deep: #b8860b;
-      --text: #e9e5e0;
-      --muted: #a8a39a;
+      --gold-bright: #f9d976;
+      --gold-deep: #8a6d3b;
+      --text-main: #e9e5e0;
+      --text-dim: #a19d96;
+      --glass: rgba(255, 255, 255, 0.03);
+      --glass-border: rgba(212, 175, 55, 0.15);
+      --accent-glow: rgba(212, 175, 55, 0.08);
+      --font-serif: 'Cormorant Garamond', serif;
+      --font-sans: 'Plus Jakarta Sans', sans-serif;
+      --font-mono: 'Space Grotesk', sans-serif;
+      --selection-bg: rgba(212, 175, 55, 0.3);
     }
 
-    body {
-      font-family: 'Inter', sans-serif;
-      background: var(--bg-dark);
-      color: var(--text);
+    /* Core Reset & Scrollbar */
+    * { 
+      margin: 0; 
+      padding: 0; 
+      box-sizing: border-box; 
+      -webkit-font-smoothing: antialiased; 
+      cursor: none; 
+      selection-background-color: var(--selection-bg);
+    }
+    
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--bg-pure); }
+    ::-webkit-scrollbar-thumb { background: var(--gold-deep); border-radius: 10px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--gold); }
+
+    body { 
+      background: var(--bg-pure); 
+      color: var(--text-main); 
+      font-family: var(--font-sans); 
+      overflow-x: hidden; 
       min-height: 100vh;
-      margin: 0;
-      overflow-x: hidden;
+      line-height: 1.6;
     }
 
-    /* --- BACKGROUND STARS (High Density) --- */
-    .bg-particles{position:fixed;inset:0;pointer-events:none;z-index:0;}
-    .particle {
+    /* Interactive UI Elements */
+    #custom-cursor { 
+      position: fixed; 
+      width: 20px; 
+      height: 20px; 
+      border: 1px solid var(--gold); 
+      border-radius: 50%; 
+      pointer-events: none; 
+      z-index: 9999; 
+      transform: translate(-50%, -50%); 
+      transition: width 0.3s cubic-bezier(0.23, 1, 0.32, 1), height 0.3s cubic-bezier(0.23, 1, 0.32, 1), background 0.3s; 
+      mix-blend-mode: difference; 
+    }
+    #cursor-dot { 
+      position: fixed; 
+      width: 4px; 
+      height: 4px; 
+      background: var(--gold); 
+      border-radius: 50%; 
+      pointer-events: none; 
+      z-index: 9999; 
+      transform: translate(-50%, -50%); 
+    }
+
+    /* Background Architecture */
+    .bg-canvas { 
+      position: fixed; 
+      inset: 0; 
+      z-index: 0; 
+      background: radial-gradient(circle at 50% 50%, #0a090c 0%, #050406 100%); 
+    }
+    #stars-container { position: absolute; inset: 0; }
+    .star { 
+      position: absolute; 
+      background: white; 
+      border-radius: 50%; 
+      filter: blur(0.5px); 
+      pointer-events: none; 
+      animation: pulse-star var(--d) infinite ease-in-out;
+    }
+    @keyframes pulse-star {
+      0%, 100% { opacity: 0.2; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.2); }
+    }
+
+    #main-wrapper { 
+      position: relative; 
+      z-index: 10; 
+      width: 100%; 
+      max-width: 1400px; 
+      margin: 0 auto; 
+      padding: 0 2rem; 
+    }
+
+    /* Navigation Architecture */
+    header { 
+      padding: 3rem 0; 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center; 
+      mix-blend-mode: difference; 
+    }
+    .nav-link { 
+      font-family: var(--font-mono); 
+      font-size: 0.75rem; 
+      font-weight: 700; 
+      letter-spacing: 0.2em; 
+      text-transform: uppercase; 
+      color: var(--text-dim); 
+      position: relative; 
+      transition: 0.4s cubic-bezier(0.23, 1, 0.32, 1); 
+      background: none; 
+      border: none; 
+      padding: 0.5rem 0;
+    }
+    .nav-link:hover, .nav-link.active { color: var(--gold); }
+    .nav-link::after {
+      content: '';
       position: absolute;
-      border-radius: 50%;
-      box-shadow: 0 0 12px rgba(212,175,55,0.5);
-      animation: twinkle var(--duration) ease-in-out infinite;
+      bottom: -4px;
+      left: 0;
+      width: 0%;
+      height: 1px;
+      background: var(--gold);
+      transition: width 0.4s cubic-bezier(0.23, 1, 0.32, 1);
     }
-    @keyframes twinkle {
-      0%, 100% { opacity: 0.3; transform: scale(1); }
-      50% { opacity: 1; transform: scale(1.3); }
+    .nav-link.active::after, .nav-link:hover::after { width: 100%; }
+
+    /* Component Architecture */
+    .ds-card { 
+      background: var(--glass); 
+      backdrop-filter: blur(20px); 
+      border: 1px solid var(--glass-border); 
+      border-radius: 24px; 
+      padding: 3rem; 
+      position: relative; 
+      overflow: hidden; 
+      transition: 0.6s cubic-bezier(0.165, 0.84, 0.44, 1); 
+    }
+    .ds-card:hover { 
+      border-color: rgba(212, 175, 55, 0.4); 
+      background: rgba(255, 255, 255, 0.05); 
+      transform: translateY(-10px); 
+      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
     }
 
-    /* --- LIQUID GLASS UI --- */
-    .liquid-glass{
-      position:relative;
-      background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));
-      border: 1px solid rgba(212,175,55,0.12);
-      backdrop-filter: blur(10px) saturate(120%);
-      border-radius: 14px;
-      overflow: hidden;
-      transition: transform 0.45s cubic-bezier(.2,.9,.2,1), border 0.3s;
+    .hero-title { 
+      font-family: var(--font-serif); 
+      font-size: clamp(3rem, 10vw, 8rem); 
+      line-height: 0.9; 
+      font-weight: 700; 
+      letter-spacing: -0.03em; 
     }
-    .liquid-glass:hover{ border-color: var(--gold); }
-    .grain{
-      position:absolute;inset:0;pointer-events:none;opacity:0.04;
-      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40"><filter id="n"><feTurbulence baseFrequency="0.8" numOctaves="1" stitchTiles="stitch" /></filter><rect width="100%" height="100%" filter="url(%23n)"/></svg>');
+    .glint-effect { 
+      background: linear-gradient(135deg, #fff 0%, var(--gold) 35%, #fff 50%, var(--gold) 65%, #fff 100%); 
+      background-size: 400% 400%; 
+      -webkit-background-clip: text; 
+      -webkit-text-fill-color: transparent; 
+      animation: glint-animation 12s ease infinite; 
     }
-
-    /* --- NAVIGATION --- */
-    .tab-button{position:relative;padding-bottom:.5rem;transition:color .2s; cursor:pointer;}
-    .tab-button.active{color:var(--gold); font-weight:800;}
-    .tab-button.active::after{
-      content:'';position:absolute;height:3px;background:var(--gold);
-      left:0;right:0;bottom:-6px;border-radius:20px;
-      box-shadow: 0 0 10px var(--gold);
+    @keyframes glint-animation { 
+      0% { background-position: 0% 50%; } 
+      50% { background-position: 100% 50%; } 
+      100% { background-position: 0% 50%; } 
     }
 
-    /* --- BUTTONS --- */
-    .btn-primary{
-      background: linear-gradient(180deg, rgba(212,175,55,0.15), rgba(212,175,55,0.05));
-      color: var(--gold);
-      padding:.8rem 1.6rem; border-radius:999px; font-weight:700; border:1px solid rgba(212,175,55,0.3);
-      transition: 0.3s ease;
+    .btn-download { 
+      position: relative; 
+      padding: 1rem 2.5rem; 
+      background: var(--gold); 
+      color: black; 
+      font-family: var(--font-mono); 
+      font-weight: 700; 
+      font-size: 0.8rem; 
+      text-transform: uppercase; 
+      border-radius: 12px; 
+      transition: 0.4s cubic-bezier(0.23, 1, 0.32, 1); 
+      display: inline-flex; 
+      align-items: center; 
+      gap: 0.75rem; 
+      overflow: hidden; 
+      border: none;
     }
-    .btn-primary:hover{ transform: translateY(-2px); box-shadow: 0 5px 15px rgba(212,175,55,0.2); }
-
-    /* --- ADMIN SYSTEM --- */
-    #login-overlay {
-      display: none; position: fixed; inset: 0; z-index: 999;
-      background: rgba(0,0,0,0.9); backdrop-filter: blur(10px);
-      align-items: center; justify-content: center;
-    }
-    .admin-visible { display: none; }
-    .is-admin .admin-visible { display: block; }
-    .is-admin .hide-admin { display: none; }
-
-    input, textarea {
-      background: rgba(255,255,255,0.02) !important;
-      border: 1px solid rgba(212,175,55,0.2) !important;
-      color: white !important;
-      padding: 10px; border-radius: 8px;
+    .btn-download:hover { 
+      background: var(--gold-bright); 
+      transform: scale(1.05); 
+      box-shadow: 0 0 30px rgba(212, 175, 55, 0.4); 
     }
 
-    .glint-text {
-      background: linear-gradient(110deg, #fff 20%, var(--gold) 50%, #fff 80%);
-      background-size: 200% auto;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      animation: glint 4s linear infinite;
+    .input-field { 
+      background: rgba(255,255,255,0.02); 
+      border: 1px solid var(--glass-border); 
+      border-radius: 12px; 
+      padding: 1.25rem; 
+      color: white; 
+      width: 100%; 
+      transition: 0.3s; 
+      font-family: var(--font-sans);
     }
-    @keyframes glint { to { background-position: 200% center; } }
-  </style>
+    .input-field:focus { 
+      outline: none; 
+      border-color: var(--gold); 
+      background: rgba(255,255,255,0.05); 
+      box-shadow: 0 0 20px rgba(212, 175, 55, 0.1);
+    }
+
+    /* Admin Infrastructure */
+    #admin-panel { 
+      display: none; 
+      position: fixed; 
+      inset: 0; 
+      z-index: 1000; 
+      background: rgba(0,0,0,0.98); 
+      backdrop-filter: blur(40px); 
+      align-items: center; 
+      justify-content: center; 
+    }
+    .admin-logged-in .staff-only { display: block !important; }
+    
+    /* FIXED: Explicitly force hidden unless the authorized class is present */
+    .staff-only { display: none !important; }
+
+    /* Reveal Mechanics */
+    .reveal { opacity: 0; transform: translateY(40px); transition: all 1.2s cubic-bezier(0.165, 0.84, 0.44, 1); }
+    .reveal.active { opacity: 1; transform: translateY(0); }
+
+    /* Section Logistics */
+    .section-content { display: none; padding-bottom: 10rem; }
+    .section-content.active { display: block; }
+
+    /* Responsive Guardrails */
+    @media (max-width: 1024px) {
+      .hero-title { font-size: 6rem; }
+      .ds-card { padding: 2rem; }
+    }
+    @media (max-width: 768px) {
+      #custom-cursor, #cursor-dot { display: none; }
+      * { cursor: auto !important; }
+      header { flex-direction: column; gap: 2rem; }
+      .hero-title { font-size: 4rem; text-align: center; }
+      .nav-link { font-size: 0.6rem; letter-spacing: 0.1em; }
+    }
+  
+  /* === ADDITIVE FEATURES v1 === */
+  .aurora {
+    position: absolute;
+    inset: -20%;
+    background:
+      radial-gradient(60% 40% at 20% 30%, rgba(212,175,55,.12), transparent 60%),
+      radial-gradient(50% 30% at 80% 20%, rgba(249,217,118,.08), transparent 60%),
+      radial-gradient(40% 40% at 50% 80%, rgba(138,109,59,.10), transparent 60%);
+    filter: blur(40px);
+    animation: auroraFloat 22s linear infinite;
+    pointer-events: none;
+  }
+  @keyframes auroraFloat {
+    0% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-4%) rotate(3deg); }
+    100% { transform: translateY(0) rotate(0deg); }
+  }
+  .magnetic {
+    transition: transform .2s ease;
+  }
+  .ripple {
+    position: absolute; border-radius: 9999px; transform: scale(0);
+    background: rgba(212,175,55,.25); animation: ripple .6s ease-out;
+    pointer-events:none;
+  }
+  @keyframes ripple {
+    to { transform: scale(8); opacity: 0; }
+  }
+
+</style>
 </head>
 <body>
+  <div class="aurora"></div>
 
-  <div class="bg-particles" id="bgParticles"></div>
+  <div class="bg-canvas">
+    <div id="stars-container"></div>
+  </div>
 
-  <!-- Login Modal -->
-  <div id="login-overlay">
-    <div class="liquid-glass p-8 w-full max-w-sm mx-4 text-center">
-      <div class="grain"></div>
-      <h2 class="text-2xl font-black mb-6 text-gold">STAFF ACCESS</h2>
-      <div class="space-y-4">
-        <input type="password" id="admin-code-input" class="w-full" placeholder="Internal Access Code">
-        <button onclick="handleLogin()" class="btn-primary w-full">AUTHENTICATE</button>
-        <button onclick="closeLogin()" class="w-full text-xs text-zinc-500 mt-2 uppercase">Cancel</button>
+  <div id="custom-cursor"></div>
+  <div id="cursor-dot"></div>
+
+  <div id="admin-panel">
+    <div class="max-w-md w-full p-10 ds-card text-center">
+      <h2 class="text-3xl font-serif text-gold mb-6 italic">Secure Staff Login</h2>
+      <p class="text-xs font-mono text-zinc-500 mb-8 uppercase tracking-widest">Biometric override required</p>
+      <input type="password" id="admin-pass" class="input-field mb-6 text-center" placeholder="••••••••">
+      <div class="flex flex-col gap-4">
+        <button onclick="authAdmin()" class="btn-download w-full justify-center">Authenticate</button>
+        <button onclick="toggleAdmin(false)" class="text-[10px] font-mono text-zinc-600 hover:text-white transition-colors uppercase tracking-[0.3em]">Abort Session</button>
       </div>
     </div>
   </div>
 
-  <div id="app-container" class="relative z-10 max-w-6xl mx-auto px-6 py-8">
-    <header class="flex flex-col md:flex-row justify-between items-center mb-12">
-      <div class="flex items-center gap-4 mb-6 md:mb-0">
-        <div class="w-12 h-12 bg-black border border-amber-900/50 rounded flex items-center justify-center font-black text-gold text-xl">DS</div>
+  <div id="main-wrapper">
+    <header>
+      <div class="flex items-center gap-5 group" onclick="switchToTab('home')" style="cursor: pointer;">
+        <div class="relative">
+          <img src="DremSyncLogo.png" alt="DS" class="w-16 h-16 rounded-2xl border border-gold/20 group-hover:border-gold/50 transition-all duration-700">
+          <div class="absolute inset-0 rounded-2xl bg-gold/10 opacity-0 group-hover:opacity-100 transition-opacity blur-lg"></div>
+        </div>
         <div>
-          <h1 class="text-2xl font-black tracking-tighter">DreamSync</h1>
-          <p class="text-[10px] text-amber-500 font-bold uppercase tracking-widest">Creative Portal</p>
+          <span class="block text-2xl font-serif text-white tracking-wide">DreamSync</span>
+          <span class="block text-[9px] font-mono text-gold tracking-[0.4em] uppercase">Creative Portal</span>
         </div>
       </div>
-
-      <nav class="flex flex-wrap justify-center gap-6 md:gap-8 text-sm uppercase font-bold tracking-widest text-zinc-500">
-        <button onclick="switchToTab('home')" id="tab-home" class="tab-button active">Home</button>
-        <button onclick="switchToTab('games')" id="tab-games" class="tab-button">Our Games</button>
-        <button onclick="switchToTab('team')" id="tab-team" class="tab-button">Team</button>
-        <button onclick="switchToTab('updates')" id="tab-updates" class="tab-button">Updates</button>
-        <button onclick="switchToTab('faq')" id="tab-faq" class="tab-button">FAQ</button>
-        <button onclick="switchToTab('contact')" id="tab-contact" class="tab-button">Contact</button>
-        <button onclick="openLogin()" class="hide-admin text-[10px] border border-amber-500/30 px-3 py-1 rounded text-amber-500 hover:bg-amber-500/10 transition">Staff Login</button>
-        <button onclick="handleLogout()" class="admin-visible text-[10px] text-red-500 border border-red-500/30 px-3 py-1 rounded">Logout</button>
+      <nav class="flex gap-10">
+        <button onclick="switchToTab('home')" id="nav-home" class="nav-link active">Index</button>
+        <button onclick="switchToTab('games')" id="nav-games" class="nav-link">Archive</button>
+        <button onclick="switchToTab('updates')" id="nav-updates" class="nav-link">Logs</button>
+        <button onclick="switchToTab('team')" id="nav-team" class="nav-link">Founders</button>
+        <button onclick="switchToTab('contact')" id="nav-contact" class="nav-link">Direct</button>
       </nav>
+      <button onclick="toggleAdmin(true)" class="hidden md:block text-[10px] font-mono border border-gold/20 px-6 py-2 rounded-full hover:bg-gold hover:text-black transition-all group overflow-hidden relative">
+        <span class="relative z-10">TERMINAL</span>
+      </button>
     </header>
 
     <main>
-      <!-- HOME -->
-      <section id="section-home" class="tab-content">
-        <div class="liquid-glass p-10 mb-8">
-          <div class="grain"></div>
-          <h1 class="text-5xl font-black mb-6 leading-tight">CRAFTING <span class="glint-text">IMMERSION.</span></h1>
-          <p class="text-zinc-400 text-lg max-w-2xl leading-relaxed">
-            DreamSync Studios is a dedicated team that crafts immersive games of many genres. Founded in 2024, we focus on depth, story, and community feedback.
-          </p>
-        </div>
-        <div class="grid md:grid-cols-2 gap-6">
-          <div class="liquid-glass p-6">
-            <h3 class="text-xl font-bold text-gold mb-2">Our Mission</h3>
-            <p class="text-zinc-400">To create enjoyable games across several genres that engage and keep players coming back for more.</p>
+      <section id="content-home" class="section-content active">
+        <div class="py-20 text-center">
+          <div class="mb-6 reveal">
+            <span class="px-4 py-1.5 border border-gold/30 rounded-full text-[10px] font-mono text-gold tracking-widest uppercase bg-gold/5">Portal Interface v4.0.2</span>
           </div>
-          <div class="liquid-glass p-6">
-            <h3 class="text-xl font-bold text-gold mb-2">Innovation Focus</h3>
-            <p class="text-zinc-400">We constantly explore new features and technologies to implement into our games and focus on community interests.</p>
+          <h1 class="hero-title reveal">WE BUILD <br> <span class="glint-effect">DREAMS.</span></h1>
+          <p class="max-w-2xl mx-auto mt-10 text-xl text-text-dim font-light reveal">A narrative-driven studio born in 2024 specializing in psychological atmospheric design and ultra-high fidelity interactive experiences.</p>
+          
+          <div class="grid md:grid-cols-3 gap-8 mt-32">
+            <div class="ds-card text-left group reveal">
+              <span class="text-gold font-mono text-[10px] uppercase mb-4 block">Core Directive</span>
+              <h3 class="text-2xl font-serif mb-4">Unrivaled Immersion</h3>
+              <p class="text-text-dim text-sm">We believe that every pixel should serve a purpose. Our proprietary narrative engine ensures that environmental storytelling is not just a feature, but the foundation.</p>
+            </div>
+            <div class="ds-card text-left group reveal">
+              <span class="text-gold font-mono text-[10px] uppercase mb-4 block">The Vision</span>
+              <h3 class="text-2xl font-serif mb-4">Narrative Excellence</h3>
+              <p class="text-text-dim text-sm">DreamSync Studios doesn't just make games; we craft digital legacies. From psychological horror to experimental thrillers, we push the boundaries of what stories can do.</p>
+            </div>
+            <div class="ds-card text-left group reveal">
+              <span class="text-gold font-mono text-[10px] uppercase mb-4 block">Technical Philosophy</span>
+              <h3 class="text-2xl font-serif mb-4">Future Tech</h3>
+              <p class="text-text-dim text-sm">Utilizing the latest in high-fidelity rendering and procedural generation, we create worlds that feel alive, breathing, and responsive to the player's soul.</p>
+            </div>
           </div>
-        </div>
-      </section>
-
-      <!-- GAMES -->
-      <section id="section-games" class="tab-content hidden">
-        <h2 class="text-4xl font-black mb-8">OUR <span class="text-gold">GAMES</span></h2>
-        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <div class="liquid-glass p-6">
-            <div class="grain"></div>
-            <h3 class="text-2xl font-bold text-gold mb-2">Screaming Forest</h3>
-            <p class="text-zinc-400 mb-4 text-sm italic">Status: Version 1.1 - Available on PC</p>
-            <p class="text-zinc-300">A psychological horror experience exploring the boundaries of sound and sight. Currently in active development.</p>
-          </div>
-          <div class="liquid-glass p-6 border-dashed border-zinc-800">
-            <h3 class="text-2xl font-bold text-zinc-600 mb-2">Project Midnight</h3>
-            <p class="text-zinc-700 italic">Unannounced title coming 2025.</p>
+          
+          <div class="mt-20 flex justify-center gap-6 reveal">
+            <button onclick="switchToTab('games')" class="btn-download">Explore Archive</button>
+            <button onclick="switchToTab('contact')" class="px-8 py-4 border border-zinc-800 rounded-xl font-mono text-xs uppercase tracking-widest hover:border-gold transition-all">Support Terminal</button>
           </div>
         </div>
       </section>
 
-      <!-- TEAM -->
-      <section id="section-team" class="tab-content hidden">
-        <h2 class="text-4xl font-black mb-8">THE <span class="text-gold">TEAM</span></h2>
-        <div class="grid md:grid-cols-2 gap-6">
-          <div class="liquid-glass p-8">
-            <div class="grain"></div>
-            <h3 class="text-2xl font-black text-white mb-1">Aneesh Saraswat</h3>
-            <p class="text-gold text-xs font-bold uppercase tracking-widest mb-4">Founder & Lead Developer</p>
-            <p class="text-zinc-400 leading-relaxed">Dedicated to coding and project management, ensuring the core vision of every DreamSync game is executed to perfection.</p>
-          </div>
-          <div class="liquid-glass p-8">
-            <div class="grain"></div>
-            <h3 class="text-2xl font-black text-white mb-1">Nathan Pinto</h3>
-            <p class="text-gold text-xs font-bold uppercase tracking-widest mb-4">Co-Founder & Developer</p>
-            <p class="text-zinc-400 leading-relaxed">Focuses on game mechanics, system design, and community outreach to keep our players connected and heard.</p>
-          </div>
-        </div>
-      </section>
-
-      <!-- UPDATES -->
-      <section id="section-updates" class="tab-content hidden">
-        <div class="flex justify-between items-center mb-8">
-          <h2 class="text-4xl font-black">STUDIO <span class="text-gold">LOGS</span></h2>
+      <section id="content-games" class="section-content">
+        <div class="mb-20">
+          <h2 class="text-5xl font-serif mb-4">Game <span class="text-gold">Archive</span></h2>
+          <p class="text-text-dim font-light">Access our stable builds and experimental prototypes.</p>
         </div>
 
-        <div class="admin-visible mb-10">
-          <div class="liquid-glass p-6 border-gold/40">
-            <div class="grain"></div>
-            <h3 class="text-gold font-bold mb-4 uppercase text-xs tracking-widest">Admin Control: Post Update</h3>
-            <div class="flex flex-col gap-4">
-              <input type="text" id="upd-title" placeholder="Update Title...">
-              <textarea id="upd-body" rows="3" placeholder="Write update details..."></textarea>
-              <button onclick="addUpdate()" class="btn-primary self-start">PUBLISH LOG</button>
+        <div class="space-y-12">
+          <div class="ds-card grid md:grid-cols-2 gap-12 items-center reveal">
+            <div class="relative group overflow-hidden rounded-xl bg-zinc-900 aspect-video flex items-center justify-center border border-white/5">
+              <span class="text-zinc-800 font-serif text-2xl italic">Screaming Forest Visualization</span>
+              <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+            </div>
+            <div>
+              <div class="flex items-center gap-4 mb-4">
+                <span class="px-3 py-1 bg-gold text-black text-[9px] font-bold rounded-full uppercase">Stable Build</span>
+                <span class="text-xs font-mono text-zinc-500">v1.1</span>
+              </div>
+              <h4 class="text-4xl font-serif mb-4">The Screaming Forest</h4>
+              <p class="text-text-dim leading-relaxed mb-8">You were on an exploration trip and started driving through a forest. The world around you became dark and you crashed. You ended up moving the car a bit near a cabin and stayed the night. When you woke up, your car parts were mysteriously gone</p>
+              <div class="flex items-center gap-6">
+                <button onclick="downloadGame('ScreamingForest_v1.1.zip', 'HorrorGame.zip')" class="btn-download">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                  Internal Download
+                </button>
+                <span class="text-xs font-mono text-zinc-600 uppercase tracking-widest">252 GB Archive</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="ds-card grid md:grid-cols-2 gap-12 items-center reveal">
+            <div class="relative group overflow-hidden rounded-xl bg-zinc-900 aspect-video flex items-center justify-center border border-white/5">
+              <span class="text-zinc-800 font-serif text-2xl italic">The Silent Guest Visualization</span>
+              <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+            </div>
+            <div>
+              <div class="flex items-center gap-4 mb-4">
+                <span class="px-3 py-1 border border-gold text-gold text-[9px] font-bold rounded-full uppercase">Stable Build</span>
+                <span class="text-xs font-mono text-zinc-500">v1.1</span>
+              </div>
+              <h4 class="text-4xl font-serif mb-4">The Silent Guest</h4>
+              <p class="text-text-dim leading-relaxed mb-8">Your friend asked you to housekeep for him...</p>
+              <div class="flex items-center gap-6">
+                <button onclick="downloadGame('SilentGuest_v1.1.zip', 'The Silent Guest.zip')" class="btn-download">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                  Internal Download
+                </button>
+                <span class="text-xs font-mono text-zinc-600 uppercase tracking-widest">1.5 GB Archive</span>
+              </div>
             </div>
           </div>
         </div>
-
-        <div id="updates-list" class="space-y-6"></div>
       </section>
 
-      <!-- FAQ -->
-      <section id="section-faq" class="tab-content hidden">
-        <h2 class="text-4xl font-black mb-8">FREQUENTLY <span class="text-gold">ASKED</span></h2>
-        <div class="space-y-4">
-          <div class="liquid-glass p-6">
-            <h3 class="text-gold font-bold mb-2">When was DreamSync founded?</h3>
-            <p class="text-zinc-400">DreamSync Studios was officially founded in 2024 by Aneesh Saraswat and Nathan Pinto.</p>
+      <section id="content-updates" class="section-content">
+        <div class="flex justify-between items-end mb-16">
+          <div>
+            <h2 class="text-5xl font-serif mb-4">Development <span class="text-gold">Logs</span></h2>
+            <p class="text-text-dim">Real-time status updates from the studio floor.</p>
           </div>
-          <div class="liquid-glass p-6">
-            <h3 class="text-gold font-bold mb-2">What platforms do you support?</h3>
-            <p class="text-zinc-400">Currently, our primary focus is on PC development via Steam and itch.io, with console considerations for the future.</p>
+          <button onclick="addLog()" class="staff-only px-6 py-2 border border-gold/30 rounded-xl text-xs font-mono text-gold hover:bg-gold/10 transition-all uppercase tracking-widest">+ New Registry</button>
+        </div>
+        <div id="logs-list" class="grid gap-8">
           </div>
-          <div class="liquid-glass p-6">
-            <h3 class="text-gold font-bold mb-2">Are you hiring?</h3>
-            <p class="text-zinc-400">We are always looking for talented freelance artists and sound designers. Reach out via our contact page!</p>
+      </section>
+
+      <section id="content-team" class="section-content">
+        <h2 class="text-5xl font-serif mb-20 text-center">The <span class="text-gold">Founders</span></h2>
+        <div class="grid md:grid-cols-2 gap-10 max-w-5xl mx-auto">
+          <div class="ds-card text-center p-12 reveal">
+            <div class="w-40 h-40 mx-auto mb-8 rounded-full border-2 border-gold/20 p-2 relative">
+              <div class="w-full h-full rounded-full bg-zinc-900 overflow-hidden relative">
+                <div class="absolute inset-0 bg-gradient-to-tr from-gold/10 to-transparent"></div>
+              </div>
+              <div class="absolute -bottom-2 right-4 bg-gold w-8 h-8 rounded-full flex items-center justify-center text-black text-[10px] font-bold">A1</div>
+            </div>
+            <h3 class="text-3xl font-serif mb-2">Aneesh Saraswat</h3>
+            <p class="text-gold font-mono text-[10px] uppercase tracking-[0.3em] mb-6">Founder</p>
+            <p class="text-text-dim text-sm italic leading-relaxed font-light">
+              "Founder and lead developer of DreamSync Studios. I am dedicated to create immersive and user driven games that give gamers a reason to play"
+            </p>
+          </div>
+          <div class="ds-card text-center p-12 reveal">
+            <div class="w-40 h-40 mx-auto mb-8 rounded-full border-2 border-gold/20 p-2 relative">
+              <div class="w-full h-full rounded-full bg-zinc-900 overflow-hidden relative">
+                <div class="absolute inset-0 bg-gradient-to-tr from-gold/10 to-transparent"></div>
+              </div>
+              <div class="absolute -bottom-2 right-4 bg-gold w-8 h-8 rounded-full flex items-center justify-center text-black text-[10px] font-bold">A2</div>
+            </div>
+            <h3 class="text-3xl font-serif mb-2">Nathan Pinto</h3>
+            <p class="text-gold font-mono text-[10px] uppercase tracking-[0.3em] mb-6">Co-Founder and Community manager</p>
+            <p class="text-text-dim text-sm italic leading-relaxed font-light">
+              "Co-Founder and developer of DreamSync Studios. My role is to ensure that our company gains attention and collect members to light this community up."
+            </p>
           </div>
         </div>
       </section>
 
-      <!-- CONTACT -->
-      <section id="section-contact" class="tab-content hidden">
-        <div class="liquid-glass p-12 text-center">
-          <div class="grain"></div>
-          <h2 class="text-4xl font-black mb-4">GET IN <span class="text-gold">TOUCH</span></h2>
-          <p class="text-zinc-400 mb-8 max-w-lg mx-auto">For support, careers, or general inquiries, our inbox is always open for the community.</p>
-          <a href="mailto:dreamsyncstudios04@gmail.com" class="text-3xl font-black text-gold hover:underline transition-all">
-            dreamsyncstudios04@gmail.com
-          </a>
-          <p class="mt-8 text-zinc-600 text-xs">Typical response time: 24-48 hours</p>
+      <section id="content-contact" class="section-content">
+        <div class="max-w-4xl mx-auto">
+          <div class="text-center mb-16">
+            <h2 class="text-5xl font-serif mb-4">Direct <span class="text-gold">Link</span></h2>
+            <p class="text-text-dim">Transmission portal for inquiries, press requests, and support sync.</p>
+          </div>
+          <form id="contact-form" class="ds-card space-y-8 relative overflow-hidden">
+            <div class="absolute top-0 right-0 p-8 opacity-5 pointer-events-none">
+              <svg class="w-32 h-32" fill="currentColor" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+            </div>
+            <div class="grid md:grid-cols-2 gap-8">
+              <div class="space-y-2">
+                <label class="text-[10px] font-mono text-gold uppercase tracking-widest ml-1">Identity</label>
+                <input type="text" name="name" placeholder="Your Name" class="input-field" required>
+              </div>
+              <div class="space-y-2">
+                <label class="text-[10px] font-mono text-gold uppercase tracking-widest ml-1">Frequency</label>
+                <input type="email" name="email" placeholder="Email Address" class="input-field" required>
+              </div>
+            </div>
+            <div class="space-y-2">
+              <label class="text-[10px] font-mono text-gold uppercase tracking-widest ml-1">Message Content</label>
+              <textarea name="message" placeholder="Compose your transmission..." class="input-field h-48 resize-none" required></textarea>
+            </div>
+            <button type="submit" class="btn-download w-full justify-center group">
+              <span class="relative z-10">Initiate Sync</span>
+              <div class="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform"></div>
+            </button>
+            <div id="form-feedback" class="hidden text-center text-xs font-mono text-gold animate-pulse tracking-[0.4em]"></div>
+          </form>
         </div>
       </section>
     </main>
-
-    <footer class="mt-24 pt-10 border-t border-zinc-900 text-center text-xs text-zinc-600">
-      &copy; 2024 DreamSync Studios. All Rights Reserved.
+    
+    <footer class="py-20 border-t border-white/5 mt-20 text-center">
+      <div class="opacity-30 flex flex-col items-center gap-4">
+        <span class="text-[10px] font-mono tracking-[0.5em] uppercase">DreamSync Studios Collective</span>
+        <span class="text-[9px] font-mono tracking-widest">NO RIGHTS RESERVED — THE FUTURE IS OPEN SOURCE</span>
+        <div class="flex gap-8 mt-4">
+          <a href="#" class="hover:text-gold transition-colors text-[9px] font-mono uppercase tracking-widest">X (Twitter)</a>
+          <a href="#" class="hover:text-gold transition-colors text-[9px] font-mono uppercase tracking-widest">Discord</a>
+          <a href="#" class="hover:text-gold transition-colors text-[9px] font-mono uppercase tracking-widest">Instagram</a>
+        </div>
+      </div>
     </footer>
   </div>
 
   <script>
-    const ACCESS_CODE = "DS-2024-ADMIN";
-    let updates = JSON.parse(localStorage.getItem('ds_logs')) || [
-      { title: "Portal Online", body: "The DreamSync creative portal is officially live. Welcome to our new home!", date: "Nov 2024" },
-      { title: "Screaming Forest v1.2", body: "Active work on AI improvements and environmental lighting is underway.", date: "Dec 2024" }
-    ];
+    /**
+     * DREAMSYNC CORE ENGINE v4.0.2
+     * Architecture by Aneesh Saraswat & Nathan Pinto
+     */
 
-    function spawnStars() {
-      const container = document.getElementById('bgParticles');
-      const count = 100; 
-      for (let i = 0; i < count; i++) {
+    const CONFIG = {
+      ADMIN_KEY: "DS-2025-ADMIN",
+      STAR_COUNT: 200,
+      CURSOR_LERP: 0.15,
+      PULSE_DUR_MIN: 2,
+      PULSE_DUR_MAX: 6,
+      FORMSPREE_ENDPOINT: "https://formspree.io/f/xwveydqo" // Replace with your Formspree form URL
+    };
+
+    
+    // --- HARD ADMIN GUARD ---
+    function requireAdmin(action = "This action") {
+      if (!state.isAdmin) {
+        console.warn(`Blocked unauthorized attempt: ${action}`);
+        alert("ACCESS DENIED — ADMIN AUTHENTICATION REQUIRED");
+        throw new Error("Unauthorized admin access blocked: " + action);
+      }
+    }
+
+
+    let state = {
+      isAdmin: false,
+      currentTab: 'home',
+      logs: JSON.parse(localStorage.getItem('ds_logs')) || [
+        { 
+          id: 1, 
+          title: "Welcome to DreamSync Studios", 
+          body: "The official DreamSync Studios website is now live! This platform serves as a hub for us to communicate with users and a place where users can see upcoming features and updates!", 
+          date: "DEC 22 2025",
+          author: "Aneesh Saraswat"
+        },
+        { 
+          id: 2, 
+          title: "Screaming Forest v1.2", 
+          body: "We are excited to announce the upcoming release of Screaming Forest v1.2! This update brings significant improvements to the game's atmosphere and gameplay mechanics, enhancing the overall experience for our players.", 
+          date: "DEC 22 2025",
+          author: "Aneesh Saraswat"
+        }
+      ]
+    };
+
+    /**
+     * Initialize Engine
+     */
+    window.addEventListener('DOMContentLoaded', () => {
+      initBackground();
+      initCursor();
+      checkAuth();
+      initScrollEffects();
+      initContactForm();
+      initAnimations();
+      
+      // Initial Reveal
+      gsap.to('.reveal', {
+        opacity: 1,
+        y: 0,
+        stagger: 0.1,
+        duration: 1.5,
+        ease: "power4.out",
+        delay: 0.5
+      });
+    });
+
+    /**
+     * Starfield Matrix Generator
+     */
+    function initBackground() {
+      const container = document.getElementById('stars-container');
+      for (let i = 0; i < CONFIG.STAR_COUNT; i++) {
         const star = document.createElement('div');
-        star.className = 'particle';
-        const size = Math.random() * 3 + 1;
-        star.style.width = size + 'px';
-        star.style.height = size + 'px';
-        star.style.left = Math.random() * 100 + '%';
-        star.style.top = Math.random() * 100 + '%';
-        star.style.background = 'rgba(212, 175, 55, ' + (Math.random() * 0.7 + 0.3) + ')';
-        star.style.setProperty('--duration', (Math.random() * 3 + 2) + 's');
+        star.className = 'star';
+        const size = Math.random() * 2 + 0.5;
+        const dur = Math.random() * (CONFIG.PULSE_DUR_MAX - CONFIG.PULSE_DUR_MIN) + CONFIG.PULSE_DUR_MIN;
+        
+        star.style.width = `${size}px`;
+        star.style.height = `${size}px`;
+        star.style.left = `${Math.random() * 100}%`;
+        star.style.top = `${Math.random() * 100}%`;
+        star.style.setProperty('--d', `${dur}s`);
+        star.style.opacity = Math.random();
+        
         container.appendChild(star);
       }
     }
 
-    function openLogin() { document.getElementById('login-overlay').style.display = 'flex'; }
-    function closeLogin() { document.getElementById('login-overlay').style.display = 'none'; }
+    /**
+     * Precision Custom Cursor
+     */
+    function initCursor() {
+      const cursor = document.getElementById('custom-cursor');
+      const dot = document.getElementById('cursor-dot');
+      let mouseX = 0, mouseY = 0;
+      let ballX = 0, ballY = 0;
 
-    function handleLogin() {
-      if (document.getElementById('admin-code-input').value === ACCESS_CODE) {
-        localStorage.setItem('ds_admin', 'true');
-        checkAuth();
-        closeLogin();
-        switchToTab('updates');
+      window.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+        gsap.set(dot, { x: mouseX, y: mouseY });
+      });
+
+      // Smooth lerp for outer cursor ring
+      gsap.ticker.add(() => {
+        ballX += (mouseX - ballX) * CONFIG.CURSOR_LERP;
+        ballY += (mouseY - ballY) * CONFIG.CURSOR_LERP;
+        gsap.set(cursor, { x: ballX, y: ballY });
+      });
+
+      // Interactive hover states
+      document.querySelectorAll('button, a, .ds-card, input, textarea').forEach(el => {
+        el.addEventListener('mouseenter', () => {
+          gsap.to(cursor, { 
+            width: 80, 
+            height: 80, 
+            background: 'rgba(212, 175, 55, 0.05)', 
+            borderColor: 'rgba(212, 175, 55, 0.8)',
+            duration: 0.4,
+            ease: "power2.out"
+          });
+          gsap.to(dot, { scale: 2, duration: 0.3 });
+        });
+        el.addEventListener('mouseleave', () => {
+          gsap.to(cursor, { 
+            width: 20, 
+            height: 20, 
+            background: 'transparent', 
+            borderColor: 'var(--gold)',
+            duration: 0.4,
+            ease: "power2.out"
+          });
+          gsap.to(dot, { scale: 1, duration: 0.3 });
+        });
+      });
+    }
+
+    /**
+     * Game File Deployment Logic
+     */
+    function downloadGame(filename, customUrl) {
+      const btn = event.currentTarget;
+      const originalContent = btn.innerHTML;
+      
+      // Loading State Simulation
+      btn.classList.add('pointer-events-none');
+      btn.innerHTML = `
+        <svg class="animate-spin h-4 w-4 mr-2" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+        Syncing...
+      `;
+
+      setTimeout(() => {
+        const link = document.createElement('a');
+        
+        // Use relative path for local assets
+        if (customUrl) {
+          link.href = customUrl;
+        } else {
+          // Placeholder blob for missing assets
+          const blob = new Blob(["DreamSync Encrypted File Data Stream"], { type: 'text/plain' });
+          link.href = window.URL.createObjectURL(blob);
+        }
+
+        link.setAttribute('download', filename);
+        link.style.display = 'none';
+        document.body.appendChild(link);
+        link.click();
+        
+        // UX Transition
+        btn.innerHTML = "Complete";
+        btn.style.background = "#22c55e";
+        
+        setTimeout(() => {
+          document.body.removeChild(link);
+          btn.innerHTML = originalContent;
+          btn.style.background = "";
+          btn.classList.remove('pointer-events-none');
+        }, 3000);
+      }, 1800);
+    }
+
+    /**
+     * View Switcher Logic
+     */
+    function switchToTab(id) {
+      if (id === state.currentTab) return;
+      
+      const current = document.getElementById('content-' + state.currentTab);
+      const next = document.getElementById('content-' + id);
+      
+      // Nav State
+      document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+      const activeLink = document.getElementById('nav-' + id);
+      if(activeLink) activeLink.classList.add('active');
+
+      // Transition Sequence
+      gsap.to(current, { 
+        opacity: 0, 
+        y: 40, 
+        duration: 0.6, 
+        ease: "power4.inOut",
+        onComplete: () => {
+          current.classList.remove('active');
+          next.classList.add('active');
+          
+          gsap.fromTo(next, 
+            { opacity: 0, y: -40 }, 
+            { opacity: 1, y: 0, duration: 0.8, ease: "power4.out" }
+          );
+
+          // Re-trigger reveal animations in the new section
+          const reveals = next.querySelectorAll('.reveal');
+          gsap.fromTo(reveals, 
+            { opacity: 0, y: 30 }, 
+            { opacity: 1, y: 0, stagger: 0.1, duration: 1, ease: "power2.out" }
+          );
+        }
+      });
+      
+      state.currentTab = id;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    /**
+     * Staff Authentication Logic
+     */
+    function toggleAdmin(show) {
+      const panel = document.getElementById('admin-panel');
+      if(show) {
+        panel.style.display = 'flex';
+        gsap.from(panel.querySelector('.ds-card'), { scale: 0.9, opacity: 0, duration: 0.5, ease: "back.out(1.7)" });
+        document.getElementById('admin-pass').focus();
       } else {
-        alert("Invalid Access Code");
+        gsap.to(panel.querySelector('.ds-card'), { scale: 0.9, opacity: 0, duration: 0.3, onComplete: () => {
+          panel.style.display = 'none';
+        }});
       }
     }
 
-    function handleLogout() {
-      localStorage.removeItem('ds_admin');
-      checkAuth();
-      switchToTab('home');
+    function authAdmin() {
+      const pass = document.getElementById('admin-pass').value;
+      if (pass === CONFIG.ADMIN_KEY) {
+        state.isAdmin = true;
+        document.body.classList.add('admin-logged-in');
+        toggleAdmin(false);
+        renderLogs();
+        // Visual notification
+        const terminalBtn = document.querySelector('header button');
+        terminalBtn.innerHTML = "AUTHORIZED";
+        terminalBtn.style.color = "var(--gold)";
+      } else {
+        document.getElementById('admin-pass').classList.add('border-red-500');
+        gsap.to('#admin-panel .ds-card', { x: [-10, 10, -10, 10, 0], duration: 0.4 });
+        setTimeout(() => document.getElementById('admin-pass').classList.remove('border-red-500'), 1000);
+      }
     }
 
     function checkAuth() {
-      const isAdmin = localStorage.getItem('ds_admin') === 'true';
-      if (isAdmin) document.body.classList.add('is-admin');
-      else document.body.classList.remove('is-admin');
+      // Authentication is session-based only - no persistence
+      state.isAdmin = false;
+      document.body.classList.remove('admin-logged-in');
+      renderLogs();
     }
 
-    function switchToTab(id) {
-      document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
-      document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
-      document.getElementById('section-' + id).classList.remove('hidden');
-      document.getElementById('tab-' + id).classList.add('active');
+    /**
+     * Contact Protocol
+     */
+    function initContactForm() {
+      const form = document.getElementById('contact-form');
+      const feedback = document.getElementById('form-feedback');
+      if (!form) return;
+      
+      form.onsubmit = (e) => {
+        e.preventDefault();
+        feedback.classList.remove('hidden');
+        feedback.textContent = "UPLOADING DATA PACKETS...";
+        
+        gsap.to(form, { opacity: 0.5, pointerEvents: 'none', duration: 0.4 });
+
+        const formData = new FormData(form);
+
+        fetch(CONFIG.FORMSPREE_ENDPOINT, {
+          method: 'POST',
+          body: formData,
+          headers: {
+            'Accept': 'application/json'
+          }
+        })
+        .then(response => {
+          if (response.ok) {
+            feedback.textContent = "TRANSMISSION SUCCESSFUL.";
+            gsap.to(form, { opacity: 1, pointerEvents: 'auto', duration: 0.4 });
+            form.reset();
+            setTimeout(() => feedback.classList.add('hidden'), 5000);
+          } else {
+            throw new Error('Network response was not ok.');
+          }
+        })
+        .catch(error => {
+          console.error('Form submission failed:', error);
+          feedback.textContent = "TRANSMISSION FAILED. PLEASE TRY AGAIN.";
+          gsap.to(form, { opacity: 1, pointerEvents: 'auto', duration: 0.4 });
+          setTimeout(() => feedback.classList.add('hidden'), 5000);
+        });
+      };
     }
 
-    function renderUpdates() {
-      const list = document.getElementById('updates-list');
-      list.innerHTML = updates.map(upd => `
-        <div class="liquid-glass p-8">
-          <div class="grain"></div>
-          <div class="flex justify-between items-center mb-2">
-            <h3 class="text-xl font-bold text-gold">${upd.title}</h3>
-            <span class="text-[10px] text-zinc-500 font-bold">${upd.date}</span>
-          </div>
-          <p class="text-zinc-400 leading-relaxed">${upd.body}</p>
-        </div>
-      `).reverse().join('');
+    /**
+     * Intersection Mechanics
+     */
+    function initScrollEffects() {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => { 
+          if (entry.isIntersecting) {
+            entry.target.classList.add('active');
+          }
+        });
+      }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+      
+      document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
     }
 
-    function addUpdate() {
-      const title = document.getElementById('upd-title').value;
-      const body = document.getElementById('upd-body').value;
-      if(!title || !body) return;
-      updates.push({
-        title, body, date: new Date().toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
+    /**
+     * Aesthetic Details
+     */
+    function initAnimations() {
+      // Dynamic glare on cards based on mouse position
+      document.addEventListener('mousemove', e => {
+        document.querySelectorAll('.ds-card').forEach(card => {
+          const rect = card.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+          card.style.setProperty('--mouse-x', `${x}px`);
+          card.style.setProperty('--mouse-y', `${y}px`);
+        });
       });
-      localStorage.setItem('ds_logs', JSON.stringify(updates));
-      document.getElementById('upd-title').value = '';
-      document.getElementById('upd-body').value = '';
-      renderUpdates();
-      alert("Published successfully.");
     }
 
-    window.onload = () => {
-      spawnStars();
-      renderUpdates();
-      checkAuth();
-    };
+    /**
+     * Data Registry (Logs)
+     */
+    function renderLogs() {
+      const list = document.getElementById('logs-list');
+      if (!list) return;
+      
+      list.innerHTML = state.logs.map((log, index) => `
+        <div class="ds-card group reveal active" style="transition-delay: ${index * 0.1}s">
+          <div class="flex justify-between items-start mb-6">
+            <div>
+              <span class="text-[9px] font-mono text-gold mb-2 block tracking-widest uppercase">Registry Entry #${log.id}</span>
+              <h3 class="text-3xl font-serif text-white group-hover:text-gold transition-colors">${log.title}</h3>
+            </div>
+            <div class="text-right">
+              <span class="text-[10px] font-mono text-zinc-600 block uppercase">${log.date}</span>
+              <span class="text-[9px] font-mono text-zinc-800 block">AUTH: ${log.author || 'ROOT'}</span>
+            </div>
+          </div>
+          <p class="text-text-dim text-sm leading-relaxed font-light">${log.body}</p>
+          
+          ${state.isAdmin ? `
+          <div class="mt-8 flex items-center justify-between pt-6 border-t border-white/5">
+            <div class="flex gap-4">
+              <button onclick="editLog(${log.id})" class="text-[9px] font-mono text-gold hover:underline tracking-widest uppercase">Modify</button>
+              <button onclick="deleteLog(${log.id})" class="text-[9px] font-mono text-red-400 hover:text-red-300 tracking-widest uppercase">Purge</button>
+            </div>
+            <span class="text-[8px] font-mono text-zinc-800">ENCRYPTION: AES-256</span>
+          </div>` : ``}
+        </div>
+      `).join('');
+    }
+
+    function addLog() {
+      requireAdmin('Add Log');
+      const title = prompt("ENTER REGISTRY TITLE:");
+      const body = prompt("ENTER REGISTRY PAYLOAD:");
+      if (title && body) {
+        state.logs.unshift({ 
+          id: Date.now(), 
+          title, 
+          body, 
+          date: new Date().toLocaleDateString('en-US', { month: 'short', year: 'numeric' }).toUpperCase(),
+          author: state.isAdmin ? "FOUNDER" : "GUEST"
+        });
+        localStorage.setItem('ds_logs', JSON.stringify(state.logs));
+        renderLogs();
+      }
+    }
+
+    function deleteLog(id) {
+      requireAdmin('Delete Log');
+      if (confirm("PURGE THIS DATA PACKET PERMANENTLY?")) {
+        state.logs = state.logs.filter(l => l.id !== id);
+        localStorage.setItem('ds_logs', JSON.stringify(state.logs));
+        renderLogs();
+      }
+    }
+
+    function editLog(id) {
+      requireAdmin('Edit Log');
+      const log = state.logs.find(l => l.id === id);
+      const newBody = prompt("MODIFY PAYLOAD:", log.body);
+      if (newBody !== null) {
+        log.body = newBody;
+        localStorage.setItem('ds_logs', JSON.stringify(state.logs));
+        renderLogs();
+      }
+    }
+
+    // Force scroll to top on reload
+    window.onbeforeunload = function () {
+      window.scrollTo(0, 0);
+    }
+  
+    // === ADDITIVE FEATURES v1 ===
+    // Magnetic buttons
+    document.querySelectorAll('.btn-download, .nav-link').forEach(el => {
+      el.classList.add('magnetic');
+      el.addEventListener('mousemove', e => {
+        const r = el.getBoundingClientRect();
+        const dx = (e.clientX - (r.left + r.width/2)) * 0.15;
+        const dy = (e.clientY - (r.top + r.height/2)) * 0.15;
+        el.style.transform = `translate(${dx}px, ${dy}px)`;
+      });
+      el.addEventListener('mouseleave', () => el.style.transform = '');
+    });
+
+    // Click ripple
+    document.addEventListener('click', e => {
+      const t = e.target.closest('button, .btn-download');
+      if (!t) return;
+      const r = document.createElement('span');
+      r.className = 'ripple';
+      const rect = t.getBoundingClientRect();
+      r.style.left = (e.clientX - rect.left) + 'px';
+      r.style.top = (e.clientY - rect.top) + 'px';
+      t.style.position = 'relative';
+      t.appendChild(r);
+      setTimeout(() => r.remove(), 650);
+    });
+
+    // Reading progress bar
+    const prog = document.createElement('div');
+    prog.style.cssText = 'position:fixed;left:0;top:0;height:2px;background:var(--gold);z-index:9999;width:0%';
+    document.body.appendChild(prog);
+    window.addEventListener('scroll', () => {
+      const h = document.documentElement;
+      const sc = (h.scrollTop || document.body.scrollTop);
+      const max = (h.scrollHeight - h.clientHeight);
+      prog.style.width = ((sc / max) * 100) + '%';
+    });
+
+    // Logs hover highlight for regular users
+    document.addEventListener('mouseover', e => {
+      const card = e.target.closest('.ds-card');
+      if (card && !state.isAdmin) {
+        card.style.boxShadow = '0 10px 30px rgba(212,175,55,.12)';
+      }
+    });
+    document.addEventListener('mouseout', e => {
+      const card = e.target.closest('.ds-card');
+      if (card && !state.isAdmin) {
+        card.style.boxShadow = '';
+      }
+    });
+
+
   </script>
 </body>
 </html>
