@@ -234,6 +234,16 @@
       align-items: center; 
       justify-content: center; 
     }
+    #login-panel, #register-panel, #profile-panel, #forgot-panel { 
+      display: none; 
+      position: fixed; 
+      inset: 0; 
+      z-index: 1000; 
+      background: rgba(0,0,0,0.98); 
+      backdrop-filter: blur(40px); 
+      align-items: center; 
+      justify-content: center; 
+    }
     .admin-logged-in .staff-only { display: block !important; }
     
     /* FIXED: Explicitly force hidden unless the authorized class is present */
@@ -277,6 +287,55 @@
     50% { transform: translateY(-4%) rotate(3deg); }
     100% { transform: translateY(0) rotate(0deg); }
   }
+
+  .toggle-checkbox {
+    appearance: none;
+    width: 40px;
+    height: 20px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 10px;
+    position: relative;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+  .toggle-checkbox:checked {
+    background: var(--gold);
+  }
+  .toggle-checkbox::before {
+    content: '';
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    background: white;
+    border-radius: 50%;
+    top: 2px;
+    left: 2px;
+    transition: 0.3s;
+  }
+  .toggle-checkbox:checked::before {
+    transform: translateX(20px);
+  }
+
+  .floating-particles {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+  .particle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: var(--gold);
+    border-radius: 50%;
+    animation: float-particle 15s linear infinite;
+  }
+  @keyframes float-particle {
+    0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
+  }
   .magnetic {
     transition: transform .2s ease;
   }
@@ -313,6 +372,61 @@
     </div>
   </div>
 
+  <div id="login-panel">
+    <div class="max-w-md w-full p-10 ds-card text-center">
+      <h2 class="text-3xl font-serif text-gold mb-6 italic">User Login</h2>
+      <p class="text-xs font-mono text-zinc-500 mb-8 uppercase tracking-widest">Access your account</p>
+      <input type="text" id="login-username" class="input-field mb-4" placeholder="Username">
+      <input type="password" id="login-password" class="input-field mb-6" placeholder="Password">
+      <button onclick="toggleForgot(true)" class="text-[10px] font-mono text-gold hover:underline mb-4">Forgot Password?</button>
+      <div class="flex flex-col gap-4">
+        <button onclick="loginUser()" class="btn-download w-full justify-center">Login</button>
+        <button onclick="toggleLogin(false)" class="text-[10px] font-mono text-zinc-600 hover:text-white transition-colors uppercase tracking-[0.3em]">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="register-panel">
+    <div class="max-w-md w-full p-10 ds-card text-center">
+      <h2 class="text-3xl font-serif text-gold mb-6 italic">User Registration</h2>
+      <p class="text-xs font-mono text-zinc-500 mb-8 uppercase tracking-widest">Create your account</p>
+      <input type="email" id="register-email" class="input-field mb-4" placeholder="Email">
+      <input type="text" id="register-username" class="input-field mb-4" placeholder="Username">
+      <input type="password" id="register-password" class="input-field mb-6" placeholder="Password">
+      <div class="flex flex-col gap-4">
+        <button onclick="registerUser()" class="btn-download w-full justify-center">Register</button>
+        <button onclick="toggleRegister(false)" class="text-[10px] font-mono text-zinc-600 hover:text-white transition-colors uppercase tracking-[0.3em]">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="profile-panel">
+    <div class="max-w-md w-full p-10 ds-card text-center">
+      <h2 class="text-3xl font-serif text-gold mb-6 italic">Edit Profile</h2>
+      <p class="text-xs font-mono text-zinc-500 mb-8 uppercase tracking-widest">Update your information</p>
+      <input type="email" id="profile-email" class="input-field mb-4" placeholder="Email">
+      <input type="text" id="profile-username" class="input-field mb-4" placeholder="Username">
+      <input type="password" id="profile-password" class="input-field mb-6" placeholder="New Password">
+      <div class="flex flex-col gap-4">
+        <button onclick="updateProfile()" class="btn-download w-full justify-center">Update</button>
+        <button onclick="logoutUser()" class="text-[10px] font-mono text-red-400 hover:text-red-300 uppercase tracking-[0.3em]">Logout</button>
+        <button onclick="toggleProfile(false)" class="text-[10px] font-mono text-zinc-600 hover:text-white transition-colors uppercase tracking-[0.3em]">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="forgot-panel">
+    <div class="max-w-md w-full p-10 ds-card text-center">
+      <h2 class="text-3xl font-serif text-gold mb-6 italic">Reset Password</h2>
+      <p class="text-xs font-mono text-zinc-500 mb-8 uppercase tracking-widest">Enter your email</p>
+      <input type="email" id="forgot-email" class="input-field mb-6" placeholder="Email">
+      <div class="flex flex-col gap-4">
+        <button onclick="resetPassword()" class="btn-download w-full justify-center">Send Reset</button>
+        <button onclick="toggleForgot(false)" class="text-[10px] font-mono text-zinc-600 hover:text-white transition-colors uppercase tracking-[0.3em]">Cancel</button>
+      </div>
+    </div>
+  </div>
+
   <div id="main-wrapper">
     <header>
       <div class="flex items-center gap-5 group" onclick="switchToTab('home')" style="cursor: pointer;">
@@ -331,11 +445,20 @@
         <button onclick="switchToTab('updates')" id="nav-updates" class="nav-link">Logs</button>
         <button onclick="switchToTab('team')" id="nav-team" class="nav-link">Founders</button>
         <button onclick="switchToTab('contact')" id="nav-contact" class="nav-link">Direct</button>
+        <button onclick="switchToTab('profile')" id="nav-profile" class="nav-link">Profile</button>
+        <button onclick="toggleLogin(true)" id="login-btn" class="nav-link">Login</button>
+        <button onclick="toggleRegister(true)" id="register-btn" class="nav-link">Register</button>
       </nav>
+      <div id="user-profile" class="hidden flex items-center gap-4">
+        <span id="profile-username" class="text-[10px] font-mono text-gold"></span>
+        <button onclick="toggleProfile(true)" class="text-[10px] font-mono border border-gold/20 px-4 py-2 rounded-full hover:bg-gold hover:text-black transition-all">Profile</button>
+      </div>
       <button onclick="toggleAdmin(true)" class="hidden md:block text-[10px] font-mono border border-gold/20 px-6 py-2 rounded-full hover:bg-gold hover:text-black transition-all group overflow-hidden relative">
         <span class="relative z-10">TERMINAL</span>
       </button>
     </header>
+
+    <div class="floating-particles" id="particles-container"></div>
 
     <main>
       <section id="content-home" class="section-content active">
@@ -351,16 +474,104 @@
               <span class="text-gold font-mono text-[10px] uppercase mb-4 block">Core Directive</span>
               <h3 class="text-2xl font-serif mb-4">Unrivaled Immersion</h3>
               <p class="text-text-dim text-sm">We believe that every pixel should serve a purpose. Our proprietary narrative engine ensures that environmental storytelling is not just a feature, but the foundation.</p>
+              <div class="mt-4 flex items-center gap-2">
+                <div class="w-2 h-2 bg-gold rounded-full animate-pulse"></div>
+                <span class="text-xs text-zinc-500">Active Development</span>
+              </div>
             </div>
             <div class="ds-card text-left group reveal">
               <span class="text-gold font-mono text-[10px] uppercase mb-4 block">The Vision</span>
               <h3 class="text-2xl font-serif mb-4">Narrative Excellence</h3>
               <p class="text-text-dim text-sm">DreamSync Studios doesn't just make games; we craft digital legacies. From psychological horror to experimental thrillers, we push the boundaries of what stories can do.</p>
+              <div class="mt-4 flex items-center gap-2">
+                <div class="w-2 h-2 bg-green-500 rounded-full"></div>
+                <span class="text-xs text-zinc-500">Vision Achieved</span>
+              </div>
             </div>
             <div class="ds-card text-left group reveal">
               <span class="text-gold font-mono text-[10px] uppercase mb-4 block">Technical Philosophy</span>
               <h3 class="text-2xl font-serif mb-4">Future Tech</h3>
               <p class="text-text-dim text-sm">Utilizing the latest in high-fidelity rendering and procedural generation, we create worlds that feel alive, breathing, and responsive to the player's soul.</p>
+              <div class="mt-4 flex items-center gap-2">
+                <div class="w-2 h-2 bg-blue-500 rounded-full"></div>
+                <span class="text-xs text-zinc-500">Innovation Lab</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Additional Features Section -->
+          <div class="grid md:grid-cols-2 gap-12 mt-20 reveal">
+            <div class="ds-card p-8">
+              <h3 class="text-3xl font-serif text-gold mb-6">Our Technology Stack</h3>
+              <div class="space-y-4">
+                <div class="flex justify-between items-center">
+                  <span class="text-sm font-mono">Narrative Engine</span>
+                  <div class="w-32 h-2 bg-zinc-800 rounded-full overflow-hidden">
+                    <div class="w-full h-full bg-gradient-to-r from-gold to-gold-bright animate-pulse"></div>
+                  </div>
+                </div>
+                <div class="flex justify-between items-center">
+                  <span class="text-sm font-mono">AI Integration</span>
+                  <div class="w-32 h-2 bg-zinc-800 rounded-full overflow-hidden">
+                    <div class="w-3/4 h-full bg-gradient-to-r from-gold to-gold-bright"></div>
+                  </div>
+                </div>
+                <div class="flex justify-between items-center">
+                  <span class="text-sm font-mono">VR Support</span>
+                  <div class="w-32 h-2 bg-zinc-800 rounded-full overflow-hidden">
+                    <div class="w-1/2 h-full bg-gradient-to-r from-gold to-gold-bright"></div>
+                  </div>
+                </div>
+                <div class="flex justify-between items-center">
+                  <span class="text-sm font-mono">Cross-Platform</span>
+                  <div class="w-32 h-2 bg-zinc-800 rounded-full overflow-hidden">
+                    <div class="w-5/6 h-full bg-gradient-to-r from-gold to-gold-bright"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="ds-card p-8">
+              <h3 class="text-3xl font-serif text-gold mb-6">Community Stats</h3>
+              <div class="grid grid-cols-2 gap-6">
+                <div class="text-center">
+                  <div class="text-4xl font-serif text-gold mb-2">10K+</div>
+                  <div class="text-xs font-mono text-zinc-500 uppercase tracking-widest">Active Players</div>
+                </div>
+                <div class="text-center">
+                  <div class="text-4xl font-serif text-gold mb-2">50+</div>
+                  <div class="text-xs font-mono text-zinc-500 uppercase tracking-widest">Game Prototypes</div>
+                </div>
+                <div class="text-center">
+                  <div class="text-4xl font-serif text-gold mb-2">24/7</div>
+                  <div class="text-xs font-mono text-zinc-500 uppercase tracking-widest">Support Online</div>
+                </div>
+                <div class="text-center">
+                  <div class="text-4xl font-serif text-gold mb-2">∞</div>
+                  <div class="text-xs font-mono text-zinc-500 uppercase tracking-widest">Possibilities</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Testimonials Section -->
+          <div class="mt-20 reveal">
+            <h3 class="text-4xl font-serif text-center mb-12">What Players <span class="text-gold">Say</span></h3>
+            <div class="grid md:grid-cols-3 gap-8">
+              <div class="ds-card p-6 text-center">
+                <div class="text-gold text-6xl mb-4">"</div>
+                <p class="text-text-dim text-sm italic mb-4">DreamSync's games don't just entertain—they haunt your dreams. The Silent Guest changed how I perceive reality.</p>
+                <div class="text-xs font-mono text-zinc-500">- Alex Chen, Game Developer</div>
+              </div>
+              <div class="ds-card p-6 text-center">
+                <div class="text-gold text-6xl mb-4">"</div>
+                <p class="text-text-dim text-sm italic mb-4">The attention to detail in their atmospheric design is unparalleled. Every shadow tells a story.</p>
+                <div class="text-xs font-mono text-zinc-500">- Sarah Kim, Art Director</div>
+              </div>
+              <div class="ds-card p-6 text-center">
+                <div class="text-gold text-6xl mb-4">"</div>
+                <p class="text-text-dim text-sm italic mb-4">These aren't games; they're experiences that redefine interactive storytelling.</p>
+                <div class="text-xs font-mono text-zinc-500">- Marcus Rodriguez, Writer</div>
+              </div>
             </div>
           </div>
           
@@ -500,6 +711,90 @@
           </form>
         </div>
       </section>
+
+      <section id="content-profile" class="section-content">
+        <div class="max-w-6xl mx-auto">
+          <div class="text-center mb-16">
+            <h2 class="text-5xl font-serif mb-4">User <span class="text-gold">Profile</span></h2>
+            <p class="text-text-dim">Manage your account and preferences</p>
+          </div>
+
+          <div class="grid lg:grid-cols-3 gap-12">
+            <!-- Profile Picture Section -->
+            <div class="ds-card p-8 text-center">
+              <h3 class="text-2xl font-serif text-gold mb-6">Profile Picture</h3>
+              <div class="relative w-32 h-32 mx-auto mb-6">
+                <img id="profile-pic-display" src="DremSyncLogo.png" alt="Profile" class="w-full h-full rounded-full border-2 border-gold/50 object-cover">
+                <div class="absolute inset-0 bg-black/50 rounded-full opacity-0 hover:opacity-100 transition-opacity flex items-center justify-center">
+                  <label for="profile-pic-upload" class="cursor-pointer text-white text-sm font-mono">Change</label>
+                </div>
+              </div>
+              <input type="file" id="profile-pic-upload" accept="image/*" class="hidden" onchange="uploadProfilePic()">
+              <p class="text-xs text-zinc-500">Click to upload new picture</p>
+            </div>
+
+            <!-- Personal Info Section -->
+            <div class="ds-card p-8">
+              <h3 class="text-2xl font-serif text-gold mb-6">Personal Information</h3>
+              <div class="space-y-4">
+                <div>
+                  <label class="text-sm font-mono text-gold uppercase tracking-widest">Username</label>
+                  <input type="text" id="profile-username-edit" class="input-field mt-2" readonly>
+                </div>
+                <div>
+                  <label class="text-sm font-mono text-gold uppercase tracking-widest">Email</label>
+                  <input type="email" id="profile-email-edit" class="input-field mt-2">
+                </div>
+                <div>
+                  <label class="text-sm font-mono text-gold uppercase tracking-widest">Bio</label>
+                  <textarea id="profile-bio" class="input-field mt-2 h-24 resize-none" placeholder="Tell us about yourself..."></textarea>
+                </div>
+                <button onclick="saveProfileInfo()" class="btn-download w-full">Save Changes</button>
+              </div>
+            </div>
+
+            <!-- Account Settings Section -->
+            <div class="ds-card p-8">
+              <h3 class="text-2xl font-serif text-gold mb-6">Account Settings</h3>
+              <div class="space-y-4">
+                <div>
+                  <label class="text-sm font-mono text-gold uppercase tracking-widest">Change Password</label>
+                  <input type="password" id="profile-new-password" class="input-field mt-2" placeholder="New password">
+                </div>
+                <div class="flex items-center justify-between">
+                  <span class="text-sm font-mono text-gold uppercase tracking-widest">Email Notifications</span>
+                  <input type="checkbox" id="email-notifications" class="toggle-checkbox">
+                </div>
+                <div class="flex items-center justify-between">
+                  <span class="text-sm font-mono text-gold uppercase tracking-widest">Dark Mode</span>
+                  <input type="checkbox" id="dark-mode" class="toggle-checkbox" checked>
+                </div>
+                <div class="flex items-center justify-between">
+                  <span class="text-sm font-mono text-gold uppercase tracking-widest">Auto-save</span>
+                  <input type="checkbox" id="auto-save" class="toggle-checkbox" checked>
+                </div>
+                <button onclick="saveSettings()" class="btn-download w-full">Save Settings</button>
+                <button onclick="logoutUser()" class="text-red-400 hover:text-red-300 text-sm font-mono uppercase tracking-widest mt-4">Logout</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Activity Section -->
+          <div class="ds-card p-8 mt-12">
+            <h3 class="text-2xl font-serif text-gold mb-6">Recent Activity</h3>
+            <div id="activity-log" class="space-y-4">
+              <div class="flex items-center gap-4 p-4 bg-white/5 rounded-lg">
+                <div class="w-2 h-2 bg-gold rounded-full"></div>
+                <span class="text-sm text-zinc-400">Account created - Dec 23, 2025</span>
+              </div>
+              <div class="flex items-center gap-4 p-4 bg-white/5 rounded-lg">
+                <div class="w-2 h-2 bg-gold rounded-full"></div>
+                <span class="text-sm text-zinc-400">Profile updated - Dec 23, 2025</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
     </main>
     
     <footer class="py-20 border-t border-white/5 mt-20 text-center">
@@ -544,6 +839,15 @@
     let state = {
       isAdmin: false,
       currentTab: 'home',
+      currentUser: JSON.parse(localStorage.getItem('ds_current_user')) || null,
+      users: JSON.parse(localStorage.getItem('ds_users')) || [],
+      profilePic: localStorage.getItem('ds_profile_pic') || 'DremSyncLogo.png',
+      bio: localStorage.getItem('ds_bio') || '',
+      settings: JSON.parse(localStorage.getItem('ds_settings')) || {
+        emailNotifications: true,
+        darkMode: true,
+        autoSave: true
+      },
       logs: JSON.parse(localStorage.getItem('ds_logs')) || [
         { 
           id: 1, 
@@ -760,6 +1064,32 @@
       }
     }
 
+    function toggleLogin(show) {
+      const panel = document.getElementById('login-panel');
+      if(show) {
+        panel.style.display = 'flex';
+        gsap.from(panel.querySelector('.ds-card'), { scale: 0.9, opacity: 0, duration: 0.5, ease: "back.out(1.7)" });
+        document.getElementById('login-username').focus();
+      } else {
+        gsap.to(panel.querySelector('.ds-card'), { scale: 0.9, opacity: 0, duration: 0.3, onComplete: () => {
+          panel.style.display = 'none';
+        }});
+      }
+    }
+
+    function toggleRegister(show) {
+      const panel = document.getElementById('register-panel');
+      if(show) {
+        panel.style.display = 'flex';
+        gsap.from(panel.querySelector('.ds-card'), { scale: 0.9, opacity: 0, duration: 0.5, ease: "back.out(1.7)" });
+        document.getElementById('register-email').focus();
+      } else {
+        gsap.to(panel.querySelector('.ds-card'), { scale: 0.9, opacity: 0, duration: 0.3, onComplete: () => {
+          panel.style.display = 'none';
+        }});
+      }
+    }
+
     function authAdmin() {
       const pass = document.getElementById('admin-pass').value;
       if (pass === CONFIG.ADMIN_KEY) {
@@ -778,11 +1108,210 @@
       }
     }
 
-    function checkAuth() {
-      // Authentication is session-based only - no persistence
+    function loginUser() {
+      const username = document.getElementById('login-username').value;
+      const password = document.getElementById('login-password').value;
+      
+      if (username === 'dreamsyncstudios04@gmail.com' && password === CONFIG.ADMIN_KEY) {
+        state.currentUser = { email: username, username: 'admin' };
+        state.isAdmin = true;
+        document.body.classList.add('admin-logged-in');
+        localStorage.setItem('ds_current_user', JSON.stringify(state.currentUser));
+        toggleLogin(false);
+        updateHeader();
+        renderLogs();
+        alert('Admin login successful!');
+      } else {
+        const user = state.users.find(u => u.username === username && u.password === password);
+        if (user) {
+          state.currentUser = user;
+          state.isAdmin = false;
+          document.body.classList.remove('admin-logged-in');
+          localStorage.setItem('ds_current_user', JSON.stringify(state.currentUser));
+          toggleLogin(false);
+          updateHeader();
+          renderLogs();
+          alert('Login successful!');
+        } else {
+          alert('Invalid username or password');
+        }
+      }
+    }
+
+    function registerUser() {
+      const email = document.getElementById('register-email').value;
+      const username = document.getElementById('register-username').value;
+      const password = document.getElementById('register-password').value;
+      
+      if (!email || !username || !password) {
+        alert('Please fill all fields');
+        return;
+      }
+      
+      const existingUser = state.users.find(u => u.username === username || u.email === email);
+      if (existingUser) {
+        alert('Username or email already exists');
+        return;
+      }
+      
+      const newUser = { email, username, password };
+      state.users.push(newUser);
+      localStorage.setItem('ds_users', JSON.stringify(state.users));
+      
+      // Send notification via Formspree
+      const formData = new FormData();
+      formData.append('name', username);
+      formData.append('email', email);
+      formData.append('message', `New user registered: ${username} (${email})`);
+      
+      fetch(CONFIG.FORMSPREE_ENDPOINT, {
+        method: 'POST',
+        body: formData,
+        headers: { 'Accept': 'application/json' }
+      }).then(() => {
+        console.log('Registration notification sent');
+      }).catch(err => console.error('Failed to send notification:', err));
+      
+      toggleRegister(false);
+      alert('Registration successful! You can now login.');
+    }
+
+    function toggleProfile(show) {
+      const panel = document.getElementById('profile-panel');
+      if(show) {
+        panel.style.display = 'flex';
+        gsap.from(panel.querySelector('.ds-card'), { scale: 0.9, opacity: 0, duration: 0.5, ease: "back.out(1.7)" });
+        // Populate fields
+        document.getElementById('profile-email').value = state.currentUser.email;
+        document.getElementById('profile-username').value = state.currentUser.username;
+        document.getElementById('profile-password').value = '';
+        document.getElementById('profile-email').focus();
+      } else {
+        gsap.to(panel.querySelector('.ds-card'), { scale: 0.9, opacity: 0, duration: 0.3, onComplete: () => {
+          panel.style.display = 'none';
+        }});
+      }
+    }
+
+    function toggleForgot(show) {
+      const panel = document.getElementById('forgot-panel');
+      if(show) {
+        panel.style.display = 'flex';
+        gsap.from(panel.querySelector('.ds-card'), { scale: 0.9, opacity: 0, duration: 0.5, ease: "back.out(1.7)" });
+        document.getElementById('forgot-email').focus();
+      } else {
+        gsap.to(panel.querySelector('.ds-card'), { scale: 0.9, opacity: 0, duration: 0.3, onComplete: () => {
+          panel.style.display = 'none';
+        }});
+      }
+    }
+
+    function updateProfile() {
+      const email = document.getElementById('profile-email').value;
+      const username = document.getElementById('profile-username').value;
+      const password = document.getElementById('profile-password').value;
+      
+      if (!email || !username) {
+        alert('Email and username are required');
+        return;
+      }
+      
+      // Check if email or username conflicts with others
+      const conflict = state.users.find(u => (u.username === username || u.email === email) && u !== state.currentUser);
+      if (conflict) {
+        alert('Username or email already taken');
+        return;
+      }
+      
+      state.currentUser.email = email;
+      state.currentUser.username = username;
+      if (password) {
+        state.currentUser.password = password;
+      }
+      
+      // Update in users array
+      const index = state.users.findIndex(u => u.username === state.currentUser.username);
+      if (index !== -1) {
+        state.users[index] = state.currentUser;
+        localStorage.setItem('ds_users', JSON.stringify(state.users));
+      }
+      
+      localStorage.setItem('ds_current_user', JSON.stringify(state.currentUser));
+      updateHeader();
+      toggleProfile(false);
+      alert('Profile updated!');
+    }
+
+    function logoutUser() {
+      state.currentUser = null;
       state.isAdmin = false;
       document.body.classList.remove('admin-logged-in');
+      localStorage.removeItem('ds_current_user');
+      updateHeader();
       renderLogs();
+      toggleProfile(false);
+      alert('Logged out!');
+    }
+
+    function resetPassword() {
+      const email = document.getElementById('forgot-email').value;
+      if (!email) {
+        alert('Please enter your email');
+        return;
+      }
+      
+      // Send reset request via Formspree
+      const formData = new FormData();
+      formData.append('name', 'Password Reset Request');
+      formData.append('email', email);
+      formData.append('message', `Password reset requested for: ${email}`);
+      
+      fetch(CONFIG.FORMSPREE_ENDPOINT, {
+        method: 'POST',
+        body: formData,
+        headers: { 'Accept': 'application/json' }
+      }).then(() => {
+        alert('Password reset request sent! Check your email.');
+        toggleForgot(false);
+      }).catch(err => {
+        console.error('Failed to send reset request:', err);
+        alert('Failed to send reset request. Try again.');
+      });
+    }
+
+    function checkAuth() {
+      if (state.currentUser) {
+        if (state.currentUser.email === 'dreamsyncstudios04@gmail.com') {
+          state.isAdmin = true;
+          document.body.classList.add('admin-logged-in');
+        } else {
+          state.isAdmin = false;
+          document.body.classList.remove('admin-logged-in');
+        }
+      } else {
+        state.isAdmin = false;
+        document.body.classList.remove('admin-logged-in');
+      }
+      updateHeader();
+      renderLogs();
+    }
+
+    function updateHeader() {
+      const loginBtn = document.getElementById('login-btn');
+      const registerBtn = document.getElementById('register-btn');
+      const profileDiv = document.getElementById('user-profile');
+      const profileUsername = document.getElementById('profile-username');
+      
+      if (state.currentUser) {
+        loginBtn.classList.add('hidden');
+        registerBtn.classList.add('hidden');
+        profileDiv.classList.remove('hidden');
+        profileUsername.textContent = state.currentUser.username;
+      } else {
+        loginBtn.classList.remove('hidden');
+        registerBtn.classList.remove('hidden');
+        profileDiv.classList.add('hidden');
+      }
     }
 
     /**
